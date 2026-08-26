@@ -16,17 +16,24 @@ def git_sync():
     commit_msg= input("Enter your commit message: ")
     if commit_msg.strip():
         print("Staging changes...")
-        os.system("git add. ")
+        os.system("git add  . ")
         print("Commiting  changes...")
-        os.system("git add .")
-        print("Committing changes...")
-        os.system(f'git commit -m "{commit_msg}"')
-        print("pushing to remote repository...")
-        os.system("git push")
-        print("Git sync complete!")
-    else:
-        print("Commit message cannot be blank.")
-
+        commit_result = os.system(f'git commit -m "{commit_msg}"')
+        if commit_result == 0:
+            #check if a remote origin exists
+            remote_check = os.popen("git remote").read().strip()
+            if not remote_check:
+                print("No remote repository found.")
+                repo_url:input("Enter your Github repository URL to link : ").strip()
+                if repo_url:
+                    os.system(f"git remote add origin {repo_url}")
+                    os.system("git branch -M main")
+                    print("Git sync complete")
+                else:
+                    print("Nothing new to commit or commit failed.")
+            else:
+                print("Commit message cannot be blank.")
+        
 
 def show_menu():
     print("===LATCH: WORKFLOW STREAMLINER ===")
