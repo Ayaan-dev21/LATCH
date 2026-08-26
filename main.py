@@ -12,6 +12,7 @@ def kill_port():
         print("Invalid port number.")
 
 def git_sync():
+    repo_url =""
     print("\n--- QUICK GIT SYNC---")
     commit_msg= input("Enter your commit message: ")
     if commit_msg.strip():
