@@ -1,6 +1,13 @@
 import os
 import sys
 
+CYAN = "\033[96m"
+GREEN = "\033[92m"
+RED = "\033[91m"
+YELLOW= " \033[93m"
+RESET = "\033[0m"
+BOLD = "\033[1m"
+
 def kill_port():
     print("\n--- KILL HANGING PORT ---")
     port_input = input("Enter the port number to kill (e.g., 3000, 8000): ").strip()
@@ -70,16 +77,16 @@ def check_dependencies():
                     
                       
 def show_menu():
-    print("\n===========================================")
-    print("       LATCH: WORKFLOW STEAMLINER          ")
-    print("\n=========================================\n")
-    print(" [1] Open Dev Workspace")
-    print(" [2] Scan and Kill Hanging port")
-    print(" [3] Check Workspace Status")
-    print(" [4] Quick Git Sync Pipeline")
-    print(" [5] Manage Dependencies")
-    print(" [6] Exit")
-    print("\n===========================================")
+    print(f"\n{CYAN}===========================================")
+    print(f"       {BOLD}LATCH: WORKFLOW STEAMLINER{RESET}{CYAN}          ")
+    print(f"\n=========================================\n" + RESET)
+    print(f" {CYAN}[1]{RESET} Open Dev Workspace")
+    print(f" {CYAN}[2]{RESET} Scan and Kill Hanging port")
+    print(f" {CYAN}[3]{RESET} Check Workspace Status")
+    print(f" {CYAN}[4]{RESET} Quick Git Sync Pipeline")
+    print(f" {CYAN}[5]{RESET} Manage Dependencies")
+    print(f" {CYAN}[6]{RESET} Exit")
+    print(f"\n{CYAN}==========================================={RESET}")
 
 def main():
     while True:
