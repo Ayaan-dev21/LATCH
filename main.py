@@ -38,12 +38,12 @@ def git_sync():
             os.system(f"git remote add origin {repo_url}")
             os.system("git branch -M main")
             print("Pushing to remote...")
-            os .system("git push -u origin main")
+            os.system("/usr/bin/git push -u origin main")
         else:
             print("Skipped remote linking.")
     else:
         print("Pushing to remote origin...")
-        push_result = os.system("git push")
+        push_result = os.system("/usr/bin/git push")
         if push_result == 0:
             print("Git sync complete.")
         else:
