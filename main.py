@@ -53,7 +53,7 @@ def check_dependencies():
     print("/n---DEPENDENCY MANAGER---")
     if os.path.exists("requirements.txt"):
         print("Found requirements.txt. Checking package status...")
-        os.system("/usr/bin/pipe list")
+        os.system("/usr/bin/pip list")
         choice = input("Do you want to install/upgrade requirements? (y/n): ").strip().lower()
         if choice == 'y':
             print("Installing dependencies...")
@@ -87,7 +87,10 @@ def main():
         choice = input ("\nSelect an option (1-6): ").strip()
 
         if choice == "1":
-            print("Workspace is active. You are already in the project directory.")
+            if os.path.exists(".git"):
+                print("Workspace is active. You are inside a valid project repository.")
+            else:
+                print("Warning: No active workspace found. You are not in a project root directory.")
         elif choice == "2":
             kill_port()
         elif choice == "3":
