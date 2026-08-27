@@ -69,6 +69,7 @@ def main():
             git_sync()
         elif choice == "4":
             print("Exiting...")
+            break
         else:
             print("Invalid choice. Please enter a number between 1 and 4.")\
 
