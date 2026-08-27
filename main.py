@@ -1,79 +1,112 @@
 import os
-import subprocess
+import sys
 
 def kill_port():
-    print("\n---KILL HANGING PORT---")
-    port = input("Enter the poert number to kill (e/g 3000, 8000): ").strip()
-    if port.isdigit():
-        print(f"Searching and terminating processes on port {port}...")
-        exit_code = os.system(f"fuser -k {port}/tcp >/dev/null 2>&1")
-        if exit_code == 0:
-            print(f"Successfully cleared port {port}.")
-        else:
-            print(f"No active process found on port {port}.")
+    print("\n--- KILL HANGING PORT ---")
+    port_input = input("Enter the port number to kill (e.g., 3000, 8000): ").strip()
+    if port_input.isdigit():
+        port = int(port_input)
+        print(f"Scanning port {port}...")
+        os.system(f"fuser -k {port}/tcp >/dev/null 2>&1")
+        print(f"Port {port} check completed.")
     else:
         print("Invalid port number.")
+def workspace_status():
+    print("\n---WORKSPACE STATUS ---")
+    os.system("/usr/bin/git status -s")
+    branch = os.popen("/usr/bin/git branch --show-current").read().strip()
+    print(f"Active Branch: {branch if branch else 'None'}")
+
 def git_sync():
     print("\n--- QUICK GIT SYNC ---")
-    commit_msg = input("Enter your commit message: ").strip()
+    commit_msg = input("Enter commit message: ").strip()
+
     if not commit_msg:
         print("Error: Commit message cannot be blank.")
         return
     print("Staging changes...")
-    if os.system("/usr/bin/git add .") != 0:
+    if os.system("/usr/bin/git add .") !=0:
         print("Failed to stage changes.")
         return
     print("Committing changes...")
-    commit_result = os.system(f'/usr/bin/git commit -m "{commit_msg}"')
-    if commit_result !=0:
+    if os.system(f'/usr/bin/git commit -m "{commit_msg}"') !=0:
         print("Nothing new to commit or commit failed.")
         return
-    #check if a remote origin exists
     remote_check = os.popen("/usr/bin/git remote").read().strip()
 
     if not remote_check:
-        print("No remote repository found.")
-        repo_url= input("Enter your GitHub repository URL to link: ").strip()
+        repo_url = input("Enter GitHub repository URL: ").strip()
         if repo_url:
-            os.system(f"git remote add origin {repo_url}")
-            os.system("git branch -M main")
-            print("Pushing to remote...")
+            os.system(f"/usr/bin/git remote add origin {repo_url}")
+            os.system("/usr/bin/git branch -M main")
             os.system("/usr/bin/git push -u origin main")
         else:
             print("Skipped remote linking.")
     else:
         print("Pushing to remote origin...")
-        push_result = os.system("/usr/bin/git push")
-        if push_result == 0:
+        if os.system("/usr/bin/git push") == 0:
             print("Git sync complete.")
         else:
-            print("Push failed. Check your branch tracking or credentials.")
+            print("Push failed.")
 
+def check_dependencies():
+    print("/n---DEPENDENCY MANAGER---")
+    if os.path.exists("requirements.txt"):
+        print("Found requirements.txt. Checking package status...")
+        os.system("/usr/bin/pipe list")
+        choice = input("Do you want to install/upgrade requirements? (y/n): ").strip().lower()
+        if choice == 'y':
+            print("Installing dependencies...")
+            os.system("/usr/bin/pip install -r requirements.txt")
+        else:
+            print("Skipped installation.")
+    else:
+        print("No requirements.txt found in this directory.")
+        create = input("Do you want to generate a blank requirements.txt? (y/n): ").strip().lower()
+        if create == 'y':
+            with open("requirements.txt", "w") as f:
+                f.write("# Add your project dependencies here\n")
+            print("Created requirements.txt successfully.")
+                    
+                      
 def show_menu():
-    print("\n=== LATCH: WORKFLOW STREAMLINER ===")
-    print("1. Open Dev Workspace")
-    print("2. Scan/Kill hanging ports")
-    print("3. Quick Git sync")
-    print("4. Exit")
+    print("\n===========================================")
+    print("       LATCH: WORKFLOW STEAMLINER          ")
+    print("\n=========================================\n")
+    print(" [1] Open Dev Workspace")
+    print(" [2] Scan and Kill Hanging port")
+    print(" [3] Check Workspace Status")
+    print(" [4] Quick Git Sync Pipeline")
+    print(" [5] Manage Dependencies")
+    print(" [6] Exit")
+    print("\n===========================================")
 
 def main():
     while True:
         show_menu()
-        choice = input("\nSelect an option (1-4): ").strip()
+        choice = input ("\nSelect an option (1-6): ").strip()
 
         if choice == "1":
-            print("Workspace is active. You are already in the project directory!")
+            print("Workspace is active. You are already in the project directory.")
         elif choice == "2":
             kill_port()
         elif choice == "3":
-            git_sync()
+            workspace_status()
         elif choice == "4":
+            git_sync()
+        elif choice == "5":
+            check_dependencies()
+        elif choice == "6":
             print("Exiting...")
-            break
+            sys.exit()
         else:
-            print("Invalid choice. Please enter a number between 1 and 4.")\
+            print("Invalid choice. Enter a number between 1 and 6.")
 
 if __name__ == "__main__":
     main()
 
-                       
+
+     
+
+
+        
